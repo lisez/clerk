@@ -4,9 +4,7 @@ PROJECTNAME := $(shell basename "$(PWD)")
 
 # Go related variables.
 GOBASE := $(shell pwd)
-GOPATH := $(GOBASE)/vendor:$(GOBASE)
 GOBIN := $(GOBASE)/bin
-GOFILES := $(wildcard *.go)
 
 
 # Make is verbose in Linux. Make it silent.
@@ -14,17 +12,25 @@ MAKEFLAGS += --silent
 
 ## install: Install missing dependencies. Runs `go get` internally. e.g; make install get=github.com/foo/bar
 install:
-	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go get
+	@GOBIN=$(GOBIN) go get
 
 ## build: Compile the binary.
 build:
-	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go build -o $(PROJECTNAME) $(GOFILES)
+	@GOBIN=$(GOBIN) go build -o $(PROJECTNAME) main.go
 
 ## go-remod: Write dependencies into go.mod.
 go-remod:
-	@GOPATH=$(GOPATH) GOBIN=$(GOBIN) go mod tidy
+	@GOBIN=$(GOBIN) go mod tidy
 
-.PHONY: help install buidl go-remod
+## go-dev: Test run on development
+go-dev:
+	@GOBIN=$(GOBIN) go run main.go
+
+## go-test: Runing testings
+go-test:
+	@GOBIN=$(GOBIN) go test -v ./...
+
+.PHONY: help install buidl go-remod go-dev
 all: help
 help: Makefile
 	@echo
