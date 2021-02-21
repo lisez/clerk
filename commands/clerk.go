@@ -5,6 +5,7 @@ import (
 	"clerk/common/getter"
 	"clerk/jobs"
 	"clerk/jobs/providers"
+	"clerk/version"
 	"fmt"
 	"log"
 	"os"
@@ -54,8 +55,9 @@ func rootCmdRunner(cmd *cobra.Command, args []string) {
 // Execute ...
 func Execute() {
 	var rootCmd = &cobra.Command{
-		Use: "clerk [<schema> <file> [files...]]",
-		Run: rootCmdRunner,
+		Use:     "clerk [<schema> <file> [files...]]",
+		Version: version.CurrentVersion.String(),
+		Run:     rootCmdRunner,
 	}
 
 	rootCmd.PersistentFlags().StringVarP(&configFlag, "config", "c", "", "config file")
