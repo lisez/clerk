@@ -16,7 +16,7 @@ install:
 
 ## build: Compile the binary.
 build:
-	@GOBIN=$(GOBIN) go build -o $(PROJECTNAME) main.go
+	@GOBIN=$(GOBIN) go build -ldflags="-s -w" -o $(PROJECTNAME)
 
 ## go-remod: Write dependencies into go.mod.
 go-remod:
