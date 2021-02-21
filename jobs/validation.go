@@ -25,8 +25,8 @@ func ValidateJSONFiles(schemaPath string, filepaths []string) {
 	}
 
 	for _, file := range filepaths {
-		targetJSONFile := gojsonschema.NewReferenceLoader(fslib.WithFileProtocol(file))
-		result, err := schema.Validate(targetJSONFile)
+		docLoader := gojsonschema.NewReferenceLoader(fslib.WithFileProtocol(file))
+		result, err := schema.Validate(docLoader)
 		if err != nil {
 			log.Fatalf("load json file failed: %s", err)
 		}

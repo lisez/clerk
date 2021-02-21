@@ -2,10 +2,13 @@ package commands
 
 import (
 	"clerk/common/fslib"
+	"clerk/common/getter"
 	"clerk/jobs"
+	"clerk/jobs/providers"
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -19,9 +22,24 @@ func rootCmdRunner(cmd *cobra.Command, args []string) {
 		}
 
 		config := jobs.NewClerkConfig(configFlag)
-		for _, remote := range config.Clerk.SourceRemotes {
-			provider := remote.GetProvider()
-			log.Print(provider)
+		for _, remoteConfig := range config.Clerk.SourceRemotes {
+			if len(remoteConfig.Schema) == 0 {
+				remoteConfig.Schema = config.Clerk.Schema
+			}
+
+			switch provider := remoteConfig.GetProvider(); provider {
+			case "mongodb":
+				runner := &providers.MongodbProvider{
+					Config:     remoteConfig,
+					Timeout:    30 * time.Second,
+					Datebase:   getter.GetValueAsString(remoteConfig.Args, "database", ""),
+					Collection: getter.GetValueAsString(remoteConfig.Args, "collection", ""),
+				}
+				runner.Check()
+				runner.Start()
+			default:
+				log.Fatalf("unknown provider: %s", provider)
+			}
 		}
 	} else if len(args) > 1 {
 		jobs.IsALLJSONFiles(args)

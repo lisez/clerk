@@ -15,9 +15,10 @@ clerk:
   sourceRemotes:
     -
       args:
-        collection: law
+        database: test
+        collection: laws
       provider: mongodb
-      uri: "mongodb://localhost"
+      uri: "mongodb://localhost:27017"
   targetFiles:
     - a1
     - b1
