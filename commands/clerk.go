@@ -50,11 +50,11 @@ func rootCmdRunner(cmd *cobra.Command, args []string) {
 // Execute ...
 func Execute() {
 	var rootCmd = &cobra.Command{
-		Use: "clerk [schema] [files...]",
+		Use: "clerk [<schema> <file> [files...]]",
 		Run: rootCmdRunner,
 	}
 
-	rootCmd.PersistentFlags().StringVarP(&configFlag, "config", "c", "", "use config file")
+	rootCmd.PersistentFlags().StringVarP(&configFlag, "config", "c", "", "config file")
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
