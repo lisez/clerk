@@ -16,10 +16,9 @@ clerk:
     -
       args:
         database: test
-        collection: laws
+        collection: people
       provider: mongodb
       uri: "mongodb://localhost:27017"
   targetFiles:
-    - a1
-    - b1
-    - c1
+    - test_valid_doc.json
+    - test_invalid_doc.json
