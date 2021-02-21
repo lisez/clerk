@@ -38,3 +38,34 @@ $ go run main.go -c ./testlib/data/test_config.yml
 ObjectID("60328b85f18db7837a0d600e"): pass
 ObjectID("60328b8ff18db7837a0d601c"): invalid JSON, reasons: [age: Invalid type. Expected: integer, given: string]
 ```
+
+## Config
+
+You can find the file at `testlib/data/test_config.yml`:
+
+```yaml
+clerk:
+  schema:
+    $id: "https://example.com/person.schema.json"
+    $schema: "http://json-schema.org/draft-07/schema#"
+    properties:
+      age:
+        minimum: 0
+        type: integer
+      firstName:
+        type: string
+      lastName:
+        type: string
+    title: Person
+    type: object
+  sourceRemotes:
+    -
+      args:
+        database: test
+        collection: people
+      provider: mongodb
+      uri: "mongodb://localhost:27017"
+  targetFiles: # not implemented now
+    - test_valid_doc.json
+    - test_invalid_doc.json
+```
