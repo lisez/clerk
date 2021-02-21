@@ -1,6 +1,6 @@
 # clerk
 
-A command-line JSON validator to validate documents with JSON schema from local files or databases.
+An executable JSON validator with JSON schema to validate documents from local files or databases.
 
 ## Install
 
