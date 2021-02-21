@@ -3,6 +3,7 @@ package providers
 import (
 	"clerk/jobs"
 	"context"
+	"fmt"
 	"log"
 	"time"
 
@@ -53,10 +54,9 @@ func (p *MongodbProvider) DocValidator() func(jdoc map[string]interface{}) {
 
 		docID := jdoc["_id"]
 		if result.Valid() {
-			log.Printf("%s: pass", docID)
+			fmt.Printf("%s: pass\n", docID)
 		} else {
-			// TODO: move to warning channel
-			log.Printf("%s: invalid JSON, reasons: %s", docID, result.Errors())
+			fmt.Printf("%s: invalid JSON, reasons: %s\n", docID, result.Errors())
 		}
 	}
 }
