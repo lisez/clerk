@@ -72,10 +72,10 @@ func (p *MongodbProvider) Start() {
 	p.isFatalError(err)
 	defer client.Disconnect(ctx)
 
-	quickstartDatabase := client.Database(p.Datebase)
-	episodesCollection := quickstartDatabase.Collection(p.Collection)
+	database := client.Database(p.Datebase)
+	collection := database.Collection(p.Collection)
 
-	cursor, err := episodesCollection.Find(ctx, bson.M{})
+	cursor, err := collection.Find(ctx, bson.M{})
 	p.isFatalError(err)
 	defer cursor.Close(ctx)
 
