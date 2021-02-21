@@ -2,6 +2,7 @@ package jobs
 
 import (
 	"clerk/common/fslib"
+	"fmt"
 	"log"
 
 	"github.com/xeipuuv/gojsonschema"
@@ -32,10 +33,10 @@ func ValidateJSONFiles(schemaPath string, filepaths []string) {
 		}
 
 		if result.Valid() {
-			log.Printf("%s: pass", file)
+			fmt.Printf("%s: pass\n", file)
 		} else {
 			// TODO: move to warning channel
-			log.Printf("%s: invalid JSON, reasons: %s", file, result.Errors())
+			fmt.Printf("%s: invalid JSON, reasons: %s\n", file, result.Errors())
 		}
 	}
 }
