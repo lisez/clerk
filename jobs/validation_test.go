@@ -1,4 +1,4 @@
-package commands
+package jobs
 
 import (
 	"clerk/testlib"
@@ -12,7 +12,7 @@ func TestExecuteCommand(t *testing.T) {
 	t.Run("invalid json", func(subT *testing.T) {
 		file := testlib.GetTestPath("./data/test_invalid_doc.json")
 		message := testlib.CaptureOutput(func() {
-			executeCommand([]string{schema, file})
+			ValidateJSONFiles(schema, []string{file})
 		})
 
 		if !strings.Contains(message, "invalid JSON") {
@@ -23,7 +23,7 @@ func TestExecuteCommand(t *testing.T) {
 	t.Run("valid json", func(subT *testing.T) {
 		file := testlib.GetTestPath("./data/test_valid_doc.json")
 		message := testlib.CaptureOutput(func() {
-			executeCommand([]string{schema, file})
+			ValidateJSONFiles(schema, []string{file})
 		})
 
 		if !strings.Contains(message, "pass") {
