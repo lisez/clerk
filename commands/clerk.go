@@ -15,32 +15,36 @@ import (
 
 var configFlag string
 
+func runWithConfig() {
+	if !fslib.IsFileExist(configFlag) {
+		log.Fatalf("no such config file: %s", configFlag)
+	}
+
+	config := jobs.NewClerkConfig(configFlag)
+	for _, remoteConfig := range config.Clerk.SourceRemotes {
+		if len(remoteConfig.Schema) == 0 {
+			remoteConfig.Schema = config.Clerk.Schema
+		}
+
+		switch provider := remoteConfig.GetProvider(); provider {
+		case "mongodb":
+			runner := &providers.MongodbProvider{
+				Config:     remoteConfig,
+				Timeout:    30 * time.Second,
+				Datebase:   getter.GetValueAsString(remoteConfig.Args, "database", ""),
+				Collection: getter.GetValueAsString(remoteConfig.Args, "collection", ""),
+			}
+			runner.Check()
+			runner.Start()
+		default:
+			log.Fatalf("unknown provider: %s", provider)
+		}
+	}
+}
+
 func rootCmdRunner(cmd *cobra.Command, args []string) {
 	if len(configFlag) > 0 {
-		if !fslib.IsFileExist(configFlag) {
-			log.Fatalf("no such config file: %s", configFlag)
-		}
-
-		config := jobs.NewClerkConfig(configFlag)
-		for _, remoteConfig := range config.Clerk.SourceRemotes {
-			if len(remoteConfig.Schema) == 0 {
-				remoteConfig.Schema = config.Clerk.Schema
-			}
-
-			switch provider := remoteConfig.GetProvider(); provider {
-			case "mongodb":
-				runner := &providers.MongodbProvider{
-					Config:     remoteConfig,
-					Timeout:    30 * time.Second,
-					Datebase:   getter.GetValueAsString(remoteConfig.Args, "database", ""),
-					Collection: getter.GetValueAsString(remoteConfig.Args, "collection", ""),
-				}
-				runner.Check()
-				runner.Start()
-			default:
-				log.Fatalf("unknown provider: %s", provider)
-			}
-		}
+		runWithConfig()
 	} else if len(args) > 1 {
 		jobs.IsALLJSONFiles(args)
 		jobs.ValidateJSONFiles(args[0], args[1:])
